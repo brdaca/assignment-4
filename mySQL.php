@@ -38,8 +38,43 @@ function fListFromDatabase() {
     $conn = null;
 }
 
+function fInsertActor($fname, $lname){
+    $sql = "INSERT INTO dvdactors (fname,lname) VALUES ('$fname', '$lname')";
+  // TODO: Fill in the rest of the fuction
+    $conn = fConnectToDatabase();
+    $stmt = $conn->prepare($sql);
+    $stmt->execute(); 
+    $conn = null;
+}
 
-fListFromDatabase();
+function fDeleteActor($fname, $lname) {
+    //echo "<br><h3>Deleting movie with ASIN = $asin:</h3>";
+    $sql = "DELETE FROM dvdactors WHERE fname='$fname' AND lname = '$lname'";
+    $conn = fConnectToDatabase();
+    $stmt = $conn->prepare($sql);
+    $stmt->execute();
+    $conn = null;
+}
+
+function fListActors() {
+    //echo "<br><h3>Displaying Database Contents:</h3>";
+    $sql = 'SELECT * FROM dvdactors ORDER BY actorID';
+    $conn = fConnectToDatabase();
+    $stmt = $conn->prepare($sql);
+    $result = $stmt->execute();
+    
+    echo "<table>";
+    echo "<tr><th>Actor ID</th><th>First Name</th><th>Last Name</th></tr>";
+    while ($row = $stmt->fetch()) {
+        echo("
+        <tr><td>$row[0]</td><td>$row[1]</td><td>$row[2]</td></tr>
+        ");
+    }
+    echo "<table>";
+    $conn = null;
+}
+
+
 fInsertToDatabase('B000P0J0AQ', 'The Matrix', 7.18);
 fInsertToDatabase('B00003CXA2', 'Forest Gump',17.40);
 fInsertToDatabase('B01MAZGH7Z', 'Moana', 14.99);
@@ -50,6 +85,19 @@ fListFromDatabase();
 fDeleteFromDatabase('B000P0J0AQ');
 fListFromDatabase();
 
+fInsertActor("Keanu", "Reeves"); //matrix
+fInsertActor("Laurence", "Fishburne"); //matrix
+fInsertActor("Tom", "Hanks"); //forest gump
+fInsertActor("Sally", "Field"); // forst gump
+fInsertActor("Dwayne", "Johnson"); //moana
+fInsertActor("Jemaine", "Clement"); //moana
+fInsertActor("Brad", "Pitt");   //fight club
+fInsertActor("Edward", "Norton"); //fight club
+fInsertActor("Kevin", "Spacey");
+fInsertActor("Wes", "Bently");
+fListActors();
+fDeleteActor('Brad','Pitt');
+fListActors();
 
 
 
