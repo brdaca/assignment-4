@@ -74,6 +74,8 @@ function fListActors() {
     $conn = null;
 }
 
+//TESTING TESTING TESTING
+/*
 
 fInsertToDatabase('B000P0J0AQ', 'The Matrix', 7.18);
 fInsertToDatabase('B00003CXA2', 'Forest Gump',17.40);
@@ -99,6 +101,6 @@ fListActors();
 fDeleteActor('Brad','Pitt');
 fListActors();
 
-
+*/
 
 ?>
