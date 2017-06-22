@@ -1,3 +1,31 @@
+<html>
+
+<head>
+    <style>
+        body {
+            font-family: sans-serif;
+        }
+        
+        table {
+            border: 4px solid black;
+            width: 700px;
+            margin: auto;
+            border-collapse: collapse;
+        }
+        
+        td {
+            text-align: center;
+            padding: 10px;
+        }
+        
+        tr:nth-child(even) {
+            background-color: #999;
+        }
+
+    </style>
+</head>
+
+
 <?php
 
 include 'dbConnect.php';
@@ -27,7 +55,7 @@ function fListFromDatabase() {
     $result = $stmt->execute();
     
     echo "<table>";
-    echo "<tr><th>ASIN</th><th>Title</th><th>Price</th></tr>";
+    echo "<tr><th></th><th>ASIN</th><th>Title</th><th>Price</th></tr>";
     while ($row = $stmt->fetch()) {
         echo("
         <tr><td><img src = http://images.amazon.com/images/P/$row[0].01.MZZZZZZZ.jpg></td><td>$row[0]</td><td>$row[1]</td><td>$row[2]</td></tr>
@@ -74,6 +102,48 @@ function fListActors() {
     $conn = null;
 }
 
+    //Join for assignment 4.3:
+function fListAll() {
+    //echo "<br><h3>Displaying Database Contents:</h3>";
+    $sql = 'SELECT t.asin, t.title, t.price, r.actorID, a.fname, a.lname
+        FROM dvdtitles t, actorroles r, dvdactors a
+        WHERE t.asin = r.asin AND r.actorID = a.actorID' ;
+    $conn = fConnectToDatabase();
+    $stmt = $conn->prepare($sql);
+    $result = $stmt->execute();
+    
+    echo "<table>";
+    echo "<tr><th></th><th>ASIN</th><th>Title</th><th>Price</th><th>Actor ID</th><th>First</th><th>Last</th></tr>";
+    while ($row = $stmt->fetch()) {
+        echo("
+        <tr><td><img src = http://images.amazon.com/images/P/$row[0].01.MZZZZZZZ.jpg></td><td>$row[0]</td><td>$row[1]</td><td>$row[2]</td><td>$row[3]</td><td>$row[4]</td><td>$row[5]</td></tr>
+        ");
+    }
+    echo "<table>";
+    
+    $conn = null;
+}
+    
+
+    //this is my update function for EXTRA CREDIT!!!
+function fUpdatePrice($asin, $new_price){
+    $sql = "UPDATE dvdtitles SET price = $new_price where asin = '$asin' " ;
+    $conn = fConnectToDatabase();
+    $stmt = $conn->prepare($sql);
+    $result = $stmt->execute();
+    
+}
+    
+    
+
+    //Show all the DVDs in the database:
+    fListFromDatabase();
+
+    
+    //show complete info for all dvds that we have complete info for:
+    fListAll();
+
+
 //TESTING TESTING TESTING
 /*
 
@@ -87,16 +157,16 @@ fListFromDatabase();
 fDeleteFromDatabase('B000P0J0AQ');
 fListFromDatabase();
 
-fInsertActor("Keanu", "Reeves"); //matrix
-fInsertActor("Laurence", "Fishburne"); //matrix
-fInsertActor("Tom", "Hanks"); //forest gump
-fInsertActor("Sally", "Field"); // forst gump
-fInsertActor("Dwayne", "Johnson"); //moana
-fInsertActor("Jemaine", "Clement"); //moana
-fInsertActor("Brad", "Pitt");   //fight club
-fInsertActor("Edward", "Norton"); //fight club
-fInsertActor("Kevin", "Spacey");
-fInsertActor("Wes", "Bently");
+fInsertActor("Keanu", "Reeves"); //matrix 1
+fInsertActor("Laurence", "Fishburne"); //matrix  2
+fInsertActor("Tom", "Hanks"); //forest gump  4
+fInsertActor("Sally", "Field"); // forst gump  4
+fInsertActor("Dwayne", "Johnson"); //moana  5
+fInsertActor("Jemaine", "Clement"); //moana  6
+fInsertActor("Brad", "Pitt");   //fight club  11
+fInsertActor("Edward", "Norton"); //fight club  8
+fInsertActor("Kevin", "Spacey"); //american beauty  9
+fInsertActor("Wes", "Bently"); //american beauty  10
 fListActors();
 fDeleteActor('Brad','Pitt');
 fListActors();
@@ -104,3 +174,5 @@ fListActors();
 */
 
 ?>
+
+</html>
